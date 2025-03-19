@@ -33,7 +33,6 @@ const Page = () => {
       const User = await getUser();
       if(User){
         setUser(User)
-        console.log("user",User.credits)
       }
     };
 
