@@ -133,7 +133,7 @@ const Page = () => {
       </div>
 
       {scribbleUrl && (
-        <div className=" h-screen mt-20 xl:mt-4 flex flex-col gap-10 xl:gap-20 items-center justify-center">
+        <div className=" min-h-screen mt-20 xl:mt-4 flex flex-col gap-10 xl:gap-20 items-center justify-center">
           <div className="flex flex-col gap-8 items-center justify-center ">
             <h2 className="text-xl xl:text-4xl text-white font-semibold">
               awesome your creation is here!
