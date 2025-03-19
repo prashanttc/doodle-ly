@@ -12,7 +12,7 @@
       if (!prompt) {
         return NextResponse.json({ error: 'prompt is required' }, { status: 400 });
       }
-      const hyperRealisticPrompt = `Generate a hyper-realistic and colourful art: ${prompt}`;
+      const hyperRealisticPrompt = `Generate a hyper-realistic and colourful anime style art: ${prompt}`;
       const generatedImage = await client.images.generate({
         model: "black-forest-labs/flux-dev",
         response_format: 'b64_json',
