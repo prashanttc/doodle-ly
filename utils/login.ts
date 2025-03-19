@@ -4,7 +4,7 @@ import { createClient } from "../lib/server";
 
 export const signInwithAuth = async () => {
   const supabase =await createClient();
-  const auth_callback_url = "http://localhost:3000/auth/callback";
+  const auth_callback_url = "https://doodle-ly.vercel.app/auth/callback";
   const{data,error}= await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
