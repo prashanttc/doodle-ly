@@ -6,11 +6,12 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  id         String  @id @default(uuid()) // Matches Supabase Auth UID
-  email      String  @unique
-  name       String?
+  id         String   @id @default(uuid())
+  email      String   @unique
   avatar_url String?
-  credits    Int      @default(20)
   createdAt  DateTime @default(now())
+  name       String?
+  credits    Int      @default(20)
 }
