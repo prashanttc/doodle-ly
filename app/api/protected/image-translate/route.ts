@@ -42,7 +42,7 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: "Based on the provided image description, create a short prompt for realistic and colourfull image generation",
+              text: "Based on the provided image description, create a short prompt for realistic and colourfull art generation",
             },
             {
               type: "image_url",
