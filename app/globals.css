@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+
+@layer utilities{
+  .image-container{
+    @apply xl:h-[400px] h-[350px] w-[350px] xl:w-[400px] bg-red-400;
+  }
+}
