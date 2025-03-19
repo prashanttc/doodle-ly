@@ -15,6 +15,7 @@ export const signInwithAuth = async () => {
     console.log(error)
 
   }if(data.url){
+    console.log("dataurl",data.url)
   redirect(data.url)
   }
 };
