@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma"; 
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -6,7 +6,6 @@ const client = new OpenAI({
   baseURL: "https://api.studio.nebius.com/v1/",
   apiKey: process.env.NEBIUS_KEY,
 });
-const prisma = new PrismaClient();
 export async function POST(request: Request) {
   try {
     if (request.method !== "POST") {

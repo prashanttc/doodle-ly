@@ -1,14 +1,13 @@
 import { createClient } from "@/lib/server";
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient(); 
-const supabase = await createClient();
+import { prisma } from "@/lib/prisma"; 
 
 export async function GET() {
   try {
+    const supabase = await createClient(); // Pass cookies
+
     const { data: userSession, error: authError } = await supabase.auth.getUser();
-    
+
     if (authError || !userSession?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
