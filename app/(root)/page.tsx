@@ -6,7 +6,6 @@ const page = async () => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log("user",user)
   if (user) {
     redirect("/dashboard");
   } else {

@@ -3,10 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient(); 
+const supabase = await createClient();
 
 export async function GET() {
-  const supabase = await createClient();
-  
   try {
     const { data: userSession, error: authError } = await supabase.auth.getUser();
     
