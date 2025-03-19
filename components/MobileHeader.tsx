@@ -8,6 +8,7 @@ import {
 } from "./ui/sheet";
 import { BarChart2Icon } from "lucide-react";
 import { signOut } from "@/utils/login";
+import Link from "next/link";
 
 const MobileHeader = () => {
   return (
@@ -22,8 +23,7 @@ const MobileHeader = () => {
             <SheetTitle className="text-white text-2xl">Doodle-ly</SheetTitle>
           </SheetHeader>
           <ul className="cursor-pointer text-3xl font-semibold w-full items-center flex flex-col gap-20 mt-20 justify-between">
-            <li className="hover:underline">about</li>
-            <li className="hover:underline">your creations</li>
+            <li className="hover:underline"><Link href='/about'>about</Link></li>
           <li className="cursor-pointer" onClick={signOut}>
             logout
           </li>
