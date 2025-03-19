@@ -1,9 +1,5 @@
 "use client";
-import { createClient } from "@/lib/client";
-import {
-  generateImage,
-  generatePrompt,
-} from "@/utils/helperFunction";
+import { generateImage, generatePrompt, getUser } from "@/utils/helperFunction";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
@@ -12,16 +8,16 @@ import { AnimatedCircularProgressBar } from "@/components/magicui/animated-circu
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import DownloadButton from "@/components/DownloadButton";
+import { ShineBorder } from "@/components/magicui/shine-border";
 
 const Board = dynamic(() => import("@/components/Board"), { ssr: false });
 
 type UserProps = {
   id: string;
-  user_metadata: {
     avatarUrl?: string;
     name?: string;
+    credits:number;
     email?: string;
-  };
 };
 
 const Page = () => {
@@ -31,14 +27,13 @@ const Page = () => {
   const [progress, setProgress] = useState(0);
   const aiImageRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState<UserProps | null>(null);
+  const userId = user?.id || "";
   useEffect(() => {
-    const supabase = createClient();
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.log("Error fetching user:", error);
-      } else {
-        setUser(data?.user || null);
+      const User = await getUser();
+      if(User){
+        setUser(User)
+        console.log("user",User.credits)
       }
     };
 
@@ -62,7 +57,8 @@ const Page = () => {
         setProgress((prev) => (prev < 90 ? prev + 10 : prev));
       }, 500);
 
-      const data = await generatePrompt(imageUrl);
+      const data = await generatePrompt({ imageUrl, userId });
+      setUser((prevUser) => prevUser ? { ...prevUser, credits: prevUser.credits - 1 } : null);
       const image = await generateImage(data.description);
       setAiImageUrl(image.image);
       clearInterval(interval);
@@ -79,13 +75,17 @@ const Page = () => {
   return (
     <div className="flex flex-col justify-center p-4 w-full  xl:mt-20 min-h-screen px-5">
       <div className="flex gap-20  border-b-2  items-center border-white pb-10">
-        <Board onSave={handleSave} />
+        <Board onSave={handleSave} credits={user?.credits||0}/>
         <div className="w-full flex flex-col py-10 justify-center xl:-mt-32 gap-6 items-center h-screen ">
+          <div className="relative text-white p-5 overflow-hidden rounded-3xl">
+            <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} duration={10}/>
+            credits left:  <span className="ml-5">{user?.credits}</span>
+          </div>
           <h1 className="text-white/50">
             hey{" "}
             <span className="font-semibold text-white">
               {" "}
-              {user?.user_metadata.name}
+              {user?.name}
             </span>
           </h1>
           <h1 className="text-white text-5xl font-bold text-center">
@@ -117,7 +117,7 @@ const Page = () => {
               />
             </div>
             <Button
-              disabled={isGenerating}
+              disabled={isGenerating || user?.credits===0}
               className="p-6  bg-white flex items-center text-black rounded-xl cursor-pointer hover:bg-black hover:text-white hover:border-2 border-white/50"
               onClick={() => {
                 if (!scribbleUrl) {
@@ -139,7 +139,7 @@ const Page = () => {
             <h2 className="text-xl xl:text-4xl text-white font-semibold">
               awesome your creation is here!
             </h2>
-            <DownloadButton aiImageUrl={aiImageUrl} />
+          {aiImageUrl &&   <DownloadButton aiImageUrl={aiImageUrl} />}
           </div>
           <div className="xl:flex-row flex-col gap-10 flex items-center justify-around">
             <div className="border-2 border-white/40 rounded-2xl p-3">

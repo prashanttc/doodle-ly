@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -5,7 +6,7 @@ const client = new OpenAI({
   baseURL: "https://api.studio.nebius.com/v1/",
   apiKey: process.env.NEBIUS_KEY,
 });
-
+const prisma = new PrismaClient();
 export async function POST(request: Request) {
   try {
     if (request.method !== "POST") {
@@ -15,10 +16,23 @@ export async function POST(request: Request) {
       );
     }
 
-    const { image } = await request.json();
+    const { image, userId } = await request.json();
 
-    if (!image) {
-      return NextResponse.json({ error: "Image is required" }, { status: 400 });
+    if (!image || !userId) {
+      return NextResponse.json(
+        { error: "image or userId is required" },
+        { status: 400 }
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      return NextResponse.json({ error: "no user found" }, { status: 404 });
+    }
+    if (user.credits < 1) {
+      return NextResponse.json({ error: "no credit left" }, { status: 403 });
     }
 
     const descriptionResponse = await client.chat.completions.create({
@@ -29,7 +43,8 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: "Based on the provided image description, create a prompt for realistic and  colourfull image generation model"          },
+              text: "Based on the provided image description, create a prompt for realistic and  colourfull image generation model",
+            },
             {
               type: "image_url",
               image_url: { url: image },
@@ -38,7 +53,6 @@ export async function POST(request: Request) {
         },
       ],
       max_tokens: 300,
-      
     });
 
     const description = descriptionResponse.choices[0].message.content;
@@ -49,7 +63,12 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        credits: { decrement: 1 },
+      },
+    });
     return NextResponse.json({ description });
   } catch (error) {
     console.error("Internal server error:", error);

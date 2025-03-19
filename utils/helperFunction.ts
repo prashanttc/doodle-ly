@@ -1,13 +1,18 @@
-
 import { toast } from "sonner";
 
-export const generatePrompt = async (imageUrl: string) => {
+export const generatePrompt = async ({
+  imageUrl,
+  userId,
+}: {
+  imageUrl: string;
+  userId: string;
+}) => {
   const response = await fetch("/api/protected/image-translate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ image: imageUrl }),
+    body: JSON.stringify({ image: imageUrl, userId }),
   });
 
   const data = await response.json();
@@ -41,3 +46,25 @@ export const generateImage = async (prompt: string) => {
   return data;
 };
 
+export const getUser = async () => {
+  try {
+    const response = await fetch("/api/protected/get-user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      toast.error("Cannot find user");
+      return null;
+    }
+
+    const data = await response.json(); 
+    return data.user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    toast.error("Failed to fetch user");
+    return null;
+  }
+};

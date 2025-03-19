@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Button } from "./ui/button";
 
 interface BoardProps {
-  onSave: (imageUrl: string) => void; // Callback to pass the saved image URL
+  onSave: (imageUrl: string) => void; 
+  credits:number// Callback to pass the saved image URL
 }
 
-const Board = ({ onSave }: BoardProps) => {
+const Board = ({ onSave ,credits}: BoardProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDrawingRef = useRef(false);
 
@@ -92,19 +94,20 @@ const Board = ({ onSave }: BoardProps) => {
     <div className=" flex-col w-1/2 p-5  border-2 border-white/50 rounded-4xl gap-4 hidden xl:flex">
       <div className="flex items-center justify-between">
         <h1 className="text-xl text-white font-semibold ">create doodle </h1>
-        <div className=" flex gap-2">
-        <button
+        <div className=" flex gap-2 ">
+        <Button
+        disabled={credits===0}
           onClick={handleSave}
           className="px-4 py-2 bg-black border-2 border-white/40 text-white rounded-xl cursor-pointer"
         >
           Save Drawing
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={handleClear}
           className="px-4 py-2 bg-red-500 text-white rounded-xl cursor-pointer"
         >
           Clear
-        </button>
+        </Button>
       </div>
       </div>{" "}
       <canvas
