@@ -42,7 +42,7 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: "Based on the provided image description, create a prompt for realistic and  colourfull image generation model",
+              text: "Based on the provided image description, create a short prompt for realistic and colourfull image generation",
             },
             {
               type: "image_url",
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
           ],
         },
       ],
-      max_tokens: 300,
+      max_tokens: 100,
     });
 
     const description = descriptionResponse.choices[0].message.content;

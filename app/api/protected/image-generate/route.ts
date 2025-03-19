@@ -17,7 +17,8 @@
         model: "black-forest-labs/flux-dev",
         response_format: 'b64_json',
         n: 1,
-        size: '1024x1024',
+        size: '512x512',
+        quality:'standard',
         prompt:hyperRealisticPrompt,
       });
 

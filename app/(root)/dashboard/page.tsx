@@ -59,10 +59,12 @@ const Page = () => {
       const data = await generatePrompt({ imageUrl, userId });
       setUser((prevUser) => prevUser ? { ...prevUser, credits: prevUser.credits - 1 } : null);
       const image = await generateImage(data.description);
-      setAiImageUrl(image.image);
-      clearInterval(interval);
-      setProgress(100);
-      toast.success("Image generated successfully");
+      if(image){
+        setAiImageUrl(image.image);
+        clearInterval(interval);
+        setProgress(100);
+        toast.success("Image generated successfully");
+      }
     } catch (error) {
       console.error("Error generating AI image:", error);
       toast.error("Failed to generate image");
@@ -145,7 +147,7 @@ const Page = () => {
               <h2 className="text-lg font-semibold text-white">
                 Your Scribble
               </h2>
-              <div className="xl:h-[400px] h-[350px] w-[350px] xl:w-[400px]">
+              <div className="xl:h-[400px] h-[340px] w-[340px] xl:w-[400px]">
                 <Image
                   height={500}
                   width={500}
@@ -163,7 +165,7 @@ const Page = () => {
                 AI-Generated Image
               </h2>
               {isGenerating ? (
-                <div className="xl:h-[400px] xl:w-[400px] h-[350px] w-[350px] flex items-center justify-center">
+                <div className="xl:h-[400px] xl:w-[400px] h-[340px] w-[340px] flex items-center justify-center">
                   <AnimatedCircularProgressBar
                     max={100}
                     min={0}
@@ -175,7 +177,7 @@ const Page = () => {
                 </div>
               ) : (
                 aiImageUrl && (
-                  <div className="xl:h-[400px] xl:w-[400px] w-[350px] h-[350px]">
+                  <div className="xl:h-[400px] xl:w-[400px] w-[340px] h-[340px]">
                     <Image
                       height={500}
                       width={500}
