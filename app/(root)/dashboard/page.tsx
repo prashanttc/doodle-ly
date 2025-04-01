@@ -58,7 +58,7 @@ const Page = () => {
       }, 500);
 
       const data = await generatePrompt({ imageUrl, userId });
-      setPrompt(data)
+      setPrompt(data.description)
       setUser((prevUser) => prevUser ? { ...prevUser, credits: prevUser.credits - 1 } : null);
       const image = await generateImage(data.description);
       if(image){
