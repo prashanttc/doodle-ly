@@ -42,7 +42,7 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: "Based on the provided image description, create a descriptive and detailed prompt for anime type image generation",
+              text: "Based on the provided image description, create a descriptive and detailed prompt for a cute and warm toned anime type image generation",
             },
             {
               type: "image_url",
