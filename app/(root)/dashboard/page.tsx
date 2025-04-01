@@ -25,6 +25,7 @@ const Page = () => {
   const [aiImageUrl, setAiImageUrl] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [prompt, setPrompt] = useState('');
   const aiImageRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState<UserProps | null>(null);
   const userId = user?.id || "";
@@ -57,6 +58,7 @@ const Page = () => {
       }, 500);
 
       const data = await generatePrompt({ imageUrl, userId });
+      setPrompt(data)
       setUser((prevUser) => prevUser ? { ...prevUser, credits: prevUser.credits - 1 } : null);
       const image = await generateImage(data.description);
       if(image){
@@ -140,6 +142,7 @@ const Page = () => {
             <h2 className="text-xl xl:text-4xl text-white font-semibold">
               awesome your creation is here!
             </h2>
+            <p className="text-white text-center text-sm">{prompt}</p>
           {aiImageUrl &&   <DownloadButton aiImageUrl={aiImageUrl} />}
           </div>
           <div className="xl:flex-row flex-col gap-10 flex items-center justify-around">
